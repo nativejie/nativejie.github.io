@@ -123,7 +123,7 @@
 
 
   
-  <title>使用Scrapy爬去掘金热门文章的分析和实现 | 千羽</title>
+  <title>使用Scrapy爬取掘金热门文章的分析和实现 | 千羽</title>
   
 
 
@@ -296,7 +296,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">使用Scrapy爬去掘金热门文章的分析和实现</h2>
+          <h2 class="post-title" itemprop="name headline">使用Scrapy爬取掘金热门文章的分析和实现</h2>
         
 
         <div class="post-meta">
@@ -384,7 +384,7 @@
         <h2 id="一、分析掘金网页"><a href="#一、分析掘金网页" class="headerlink" title="一、分析掘金网页"></a>一、分析掘金网页</h2><h3 id="1-获取浏览器URL"><a href="#1-获取浏览器URL" class="headerlink" title="1. 获取浏览器URL"></a>1. 获取浏览器URL</h3><p>直接页面选择30内最热门的文章可得到URL地址为 <a href="https://juejin.im/timeline?sort=monthly_hottest" target="_blank" rel="noopener">https://juejin.im/timeline?sort=monthly_hottest</a> 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。</p>
 <h3 id="2-获得数据API"><a href="#2-获得数据API" class="headerlink" title="2. 获得数据API"></a>2. 获得数据API</h3><p><img src="https://i.loli.net/2019/12/19/RJpczqKBEOSXo9I.png" alt="请求"><br><img src="https://i.loli.net/2019/12/19/pTPbAdeSyiglUrc.png" alt="响应"><br>由此得到获取文章的API为 <a href="https://web-api.juejin.im/query" target="_blank" rel="noopener">https://web-api.juejin.im/query</a> </p>
 <h3 id="3-分析请求参数"><a href="#3-分析请求参数" class="headerlink" title="3. 分析请求参数"></a>3. 分析请求参数</h3><p>在登录状态下访问该接口的<code> Header </code>中自定义的参数有:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X-Agent: Juejin/Web</span><br><span class="line">X-Legacy-Device-Id: 1575538149621</span><br><span class="line">X-Legacy-Token: eyJhY2Nlc3NfdG9rZW4iOiJjMHFEbFBnZ1pFMmZtN3NxIiwicmVmcmVzaF90b2tlbiI6IkVoSXJPSlhvTEhRYlRBZmgiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ==</span><br><span class="line">X-Legacy-Uid: 5b502c73f265da0f9d19fc58</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X-Agent: Juejin/Web</span><br><span class="line">X-Legacy-Device-Id: 1575538149621</span><br><span class="line">X-Legacy-Token: eyJhY2Nlc3NfdG9rZWS4iOiJjMHFEbFBnZ1pFMmZtN3NxIiwicmVmcmVzaF90b2tlbiI6IkVoSXJPSlhvTEhRYlRBZmgiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfDGQ==</span><br><span class="line">X-Legacy-Uid: 5b502c73f265da0f9d19fc58</span><br></pre></td></tr></table></figure>
 <p><code> POST </code>的参数为:</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"operationName"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="attr">"query"</span>:<span class="string">""</span>,</span><br><span class="line">    <span class="attr">"variables"</span>:&#123;</span><br><span class="line">        <span class="attr">"tags"</span>:[</span><br><span class="line"></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">"category"</span>:<span class="string">"5562b415e4b00c57d9b94ac8"</span>,</span><br><span class="line">        <span class="attr">"first"</span>:<span class="number">20</span>,</span><br><span class="line">        <span class="attr">"after"</span>:<span class="string">""</span>,</span><br><span class="line">        <span class="attr">"order"</span>:<span class="string">"MONTHLY_HOTTEST"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"extensions"</span>:&#123;</span><br><span class="line">        <span class="attr">"query"</span>:&#123;</span><br><span class="line">            <span class="attr">"id"</span>:<span class="string">"653b587c5c7c8a00ddf67fc66f989d42"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>未登陆状态下的<code> Header </code>自定义参数为:</p>
