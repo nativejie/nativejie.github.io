@@ -399,7 +399,7 @@
         <blockquote>
 <p>冒泡排序（Bubble Sort）一种简单的计算机排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。</p>
 </blockquote>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="1-时间复杂度伪固定为O-n2"><a href="#1-时间复杂度伪固定为O-n2" class="headerlink" title="1.时间复杂度伪固定为O(n2)"></a>1.时间复杂度伪固定为O(n<sup>2</sup>)</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 冒泡排序 </span></span><br><span class="line"><span class="keyword">var</span> num = [<span class="number">22</span>, <span class="number">34</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">82</span>, <span class="number">55</span>, <span class="number">89</span>, <span class="number">50</span>, <span class="number">37</span>, <span class="number">5</span>, <span class="number">64</span>, <span class="number">90</span>]</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dubbleSort</span> (<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num.length;i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>;j &lt; num.length - i - <span class="number">1</span>;j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(num[j] &lt; num[j + <span class="number">1</span>]) &#123;</span><br><span class="line">                [num[j], num[j + <span class="number">1</span>]] = [num[j+<span class="number">1</span>], num[j]]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> num</span><br><span class="line">&#125;</span><br><span class="line">dubbleSort(num) </span><br><span class="line"><span class="comment">// 输出结果 [90, 89, 82, 64, 55, 50, 37, 34, 32, 22, 5, 3]</span></span><br></pre></td></tr></table></figure>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><h4 id="1-时间复杂度固定为O-n2"><a href="#1-时间复杂度固定为O-n2" class="headerlink" title="1.时间复杂度固定为O(n2)"></a>1.时间复杂度固定为O(n<sup>2</sup>)</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 冒泡排序 </span></span><br><span class="line"><span class="keyword">var</span> num = [<span class="number">22</span>, <span class="number">34</span>, <span class="number">3</span>, <span class="number">32</span>, <span class="number">82</span>, <span class="number">55</span>, <span class="number">89</span>, <span class="number">50</span>, <span class="number">37</span>, <span class="number">5</span>, <span class="number">64</span>, <span class="number">90</span>]</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dubbleSort</span> (<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num.length;i++) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>;j &lt; num.length - i - <span class="number">1</span>;j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(num[j] &lt; num[j + <span class="number">1</span>]) &#123;</span><br><span class="line">                [num[j], num[j + <span class="number">1</span>]] = [num[j+<span class="number">1</span>], num[j]]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> num</span><br><span class="line">&#125;</span><br><span class="line">dubbleSort(num) </span><br><span class="line"><span class="comment">// 输出结果 [90, 89, 82, 64, 55, 50, 37, 34, 32, 22, 5, 3]</span></span><br></pre></td></tr></table></figure>
 <h4 id="2-时间复杂度最优情况为O-n"><a href="#2-时间复杂度最优情况为O-n" class="headerlink" title="2.时间复杂度最优情况为O(n)"></a>2.时间复杂度最优情况为O(n)</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> num = [<span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>]</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dubbleSort</span> (<span class="params">arr</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> didSwap = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; num.length;i++) &#123;</span><br><span class="line">        didSwap = <span class="literal">false</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> j = <span class="number">0</span>;j &lt; num.length - i - <span class="number">1</span>;j++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(num[j] &lt; num[j + <span class="number">1</span>]) &#123;</span><br><span class="line">                [num[j], num[j + <span class="number">1</span>]] = [num[j+<span class="number">1</span>], num[j]]</span><br><span class="line">                didSwap = <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!didSwap) &#123;</span><br><span class="line">            <span class="keyword">return</span> arr</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> arr</span><br><span class="line">&#125;</span><br><span class="line">dubbleSort(num) </span><br><span class="line"><span class="comment">// 输出结果 [4, 3, 2, 1]  复杂度O(n)</span></span><br></pre></td></tr></table></figure>
       
     </div>
@@ -441,6 +441,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/b02606c3.html" rel="prev" title="<待更新>如何实现一个Virtual Dom（一）">
+                <待更新>如何实现一个Virtual Dom（一） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -524,7 +528,7 @@
               
                 <a href="/archives/%7C%7C%20archive">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -535,7 +539,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -546,7 +550,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -609,7 +613,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">1.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-时间复杂度伪固定为O-n2"><span class="nav-number">1.1.</span> <span class="nav-text">1.时间复杂度伪固定为O(n2)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-时间复杂度最优情况为O-n"><span class="nav-number">1.2.</span> <span class="nav-text">2.时间复杂度最优情况为O(n)</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码实现"><span class="nav-number">1.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-时间复杂度固定为O-n2"><span class="nav-number">1.1.</span> <span class="nav-text">1.时间复杂度固定为O(n2)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-时间复杂度最优情况为O-n"><span class="nav-number">1.2.</span> <span class="nav-text">2.时间复杂度最优情况为O(n)</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -854,4 +858,7 @@
   
 
 </body>
+ <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
 </html>

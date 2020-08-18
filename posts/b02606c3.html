@@ -123,7 +123,7 @@
 
 
   
-  <title>CentOS下使用Calibre-web搭建个人书架 | 千羽</title>
+  <title><待更新>如何实现一个Virtual Dom（一） | 千羽</title>
   
 
 
@@ -294,7 +294,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.qinayu.cn/posts/8172de42.html">
+    <link itemprop="mainEntityOfPage" href="http://www.qinayu.cn/posts/b02606c3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="千羽">
@@ -311,7 +311,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">CentOS下使用Calibre-web搭建个人书架</h2>
+          <h2 class="post-title" itemprop="name headline"><待更新>如何实现一个Virtual Dom（一）</h2>
         
 
         <div class="post-meta">
@@ -323,7 +323,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-02T14:27:19+08:00">2019-11-02</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-13T17:39:37+08:00">2020-08-13</time>
             
 
             
@@ -344,8 +344,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8A%98%E8%85%BE%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">服务器折腾笔记</span>
+                  <a href="/categories/%E5%89%8D%E7%AB%AF%E8%BD%AE%E5%AD%90/" itemprop="url" rel="index">
+                    <span itemprop="name">前端轮子</span>
                   </a>
                 </span>
 
@@ -362,8 +362,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/posts/8172de42.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/posts/8172de42.html" itemprop="commentCount"></span>
+                <a href="/posts/b02606c3.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/posts/b02606c3.html" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -396,30 +396,30 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>平常学习会看一些书籍，都是下载了存在电脑硬盘里存多了就比较乱，就想着搭建一个个人的书库。于是乎就使用<code> Docker + Calibre-Web </code>搭建了一个书库。简单的几步就可以拥有一个个人书库！</p>
-<p><a href="https://github.com/janeczku/calibre-web" target="_blank" rel="noopener">Calibre-Web Github</a></p>
-<p><a href="https://hub.docker.com/r/technosoft2000/calibre-web/" target="_blank" rel="noopener">Calibre-Web Docker Hub</a></p>
-<h2 id="下面是详细安装步骤"><a href="#下面是详细安装步骤" class="headerlink" title="下面是详细安装步骤"></a>下面是详细安装步骤</h2><h3 id="1-安装Docker"><a href="#1-安装Docker" class="headerlink" title="1. 安装Docker"></a>1. 安装Docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y docker-latest</span><br></pre></td></tr></table></figure>
+        <h3 id="生成Dom树"><a href="#生成Dom树" class="headerlink" title="生成Dom树"></a>生成Dom树</h3><p>假设有以下Dom结构</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item 1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item 2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>则对应的JS对象应该为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    type: <span class="string">'ul'</span>,</span><br><span class="line">    props: &#123;</span><br><span class="line">        class: 'list',</span><br><span class="line">        children: [</span><br><span class="line">            &#123; <span class="attr">type</span>: <span class="string">'li'</span>, <span class="attr">props</span>: &#123;&#125;, <span class="attr">children</span>: [<span class="string">'item 1'</span>]&#125;,</span><br><span class="line">            &#123; <span class="attr">type</span>: <span class="string">'li'</span>, <span class="attr">props</span>: &#123;&#125;, <span class="attr">children</span>: [<span class="string">'item 2'</span>]&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编写一个辅助函数h，上面的机构更加直观点</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">h</span> (<span class="params">type, props, ...children</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; type, props, children &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过h函数上面的结构就变成了下面这种</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">h(</span><br><span class="line">    <span class="string">'ul'</span>, &#123; <span class="string">'class'</span>: <span class="string">'list'</span> &#125;,</span><br><span class="line">    h(<span class="string">'li'</span>, &#123;&#125;, <span class="string">'item 1'</span>),</span><br><span class="line">    h(<span class="string">'li'</span>, &#123;&#125;, <span class="string">'item 2'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>借助BabelJSX优化。BabelJSX可以对JSX代码进行转换，会将以下代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">className</span>=<span class="string">"list"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item 1<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>item 2<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>转换成</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">React.createElement(<span class="string">'ul'</span>, &#123; <span class="attr">className</span>: <span class="string">'list'</span> &#125;,</span><br><span class="line">    React.createElement(<span class="string">'li'</span>, &#123;&#125;, <span class="string">'item 1'</span>),</span><br><span class="line">    React.createElement(<span class="string">'li'</span>, &#123;&#125;, <span class="string">'item 2'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>将React.createElement换成函数h就可以通过h函数进行转换，代码如下(要设置编辑器环境和顶部<code>/** @jsx h */</code>)：</p>
+<iframe width="100%" height="300" src="//jsfiddle.net/xingww_/9f7y6xn4/81/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
+控制台输出的结果为：
 
-<h3 id="2-创建Calibre容器"><a href="#2-创建Calibre容器" class="headerlink" title="2. 创建Calibre容器"></a>2. 创建Calibre容器</h3><p>先创建文件夹 <code>calibre-web</code> 在其中创建 <code>app</code> 、<code>books</code> 、<code>kindlegen</code> 、<code>config</code></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir calibre-web &amp;&amp; calibre-web/app calibre-web/books calibre-web/kindlegen calibre-web/config</span><br></pre></td></tr></table></figure>
-<p>创建容器</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker create --name=calibre-web --restart=always -v /usr/<span class="built_in">local</span>/calibre-web/books:/books -v /usr/<span class="built_in">local</span>/calibre-web/app:/calibre-web/app -v /usr/<span class="built_in">local</span>/calibre-web/kindlegen:/calibre-web/kindlegen -v /usr/<span class="built_in">local</span>/calibre-web/config:/calibre-web/config -e USE_CONFIG_DIR=<span class="literal">true</span> -e SET_CONTAINER_TIMEZONE=<span class="literal">true</span> -e CONTAINER_TIMEZONE=Asia/Shanghai -e PGID=0 -e PUID=0 -p 8083:8083 technosoft2000/calibre-web</span><br></pre></td></tr></table></figure>
-<p>以上是我使用到的参数，如需要配置其他参数可参考官方给出的参数合理增删：</p>
-<p><img src="http://60.205.204.237:8080/images/2019/11/02/QQ20191102151248.png" alt="参数"></p>
-<h3 id="3-启动容器"><a href="#3-启动容器" class="headerlink" title="3. 启动容器"></a>3. 启动容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker start calibre-web</span><br></pre></td></tr></table></figure>
-<p>其他扩展命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker stop calibre-web <span class="comment">#停止</span></span><br><span class="line">docker restart calibre-web <span class="comment">#重启</span></span><br><span class="line">docker logs -f calibre-web <span class="comment">#启动日志</span></span><br><span class="line">docker rm calibre-web <span class="comment">#删除容器</span></span><br></pre></td></tr></table></figure>
-<h3 id="其中遇到的问题"><a href="#其中遇到的问题" class="headerlink" title="其中遇到的问题"></a>其中遇到的问题</h3><h4 id="1-启动过程中从github拉取代码卡着不动"><a href="#1-启动过程中从github拉取代码卡着不动" class="headerlink" title="1. 启动过程中从github拉取代码卡着不动"></a>1. 启动过程中从github拉取代码卡着不动</h4><p>解决方法：</p>
-<p>手动输入命令克隆项目到 <code>app</code> 文件夹，可使用以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> -b master --single-branch https://github.com/janeczku/calibre-web.git /usr/<span class="built_in">local</span>/calibre-web/app/ -v</span><br></pre></td></tr></table></figure>
-<h4 id="2-日志中警告-No-write-access-at-books-new-‘metadata-db’-and-books-can’t-be-stored-at-this-directory-Please-check-and-modify-the-permissions-of-the-directory"><a href="#2-日志中警告-No-write-access-at-books-new-‘metadata-db’-and-books-can’t-be-stored-at-this-directory-Please-check-and-modify-the-permissions-of-the-directory" class="headerlink" title="2. 日志中警告 No write access at /books - new ‘metadata.db’ and books can’t be stored at this directory,Please check and modify the permissions of the directory"></a>2. 日志中警告 No write access at /books - new ‘metadata.db’ and books can’t be stored at this directory,Please check and modify the permissions of the directory</h4><p>这个问题会导致修改书本的一些信息无效，因为无法写入books文件夹中数据</p>
-<p>解决办法：</p>
-<p>给calibre-web/books文件夹修改权限，使用以下命令修改:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 /usr/<span class="built_in">local</span>/calibre-web/books</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  children: [&#123;</span><br><span class="line">    children: [<span class="string">"item 1"</span>],</span><br><span class="line">    props: <span class="literal">null</span>,</span><br><span class="line">    type: <span class="string">"li"</span></span><br><span class="line">  &#125;, &#123;</span><br><span class="line">    children: [<span class="string">"item 2"</span>],</span><br><span class="line">    props: <span class="literal">null</span>,</span><br><span class="line">    type: <span class="string">"li"</span></span><br><span class="line">  &#125;],</span><br><span class="line">  props: <span class="literal">null</span>,</span><br><span class="line">  type: <span class="string">"ul"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="根据Dom树创建真实Dom"><a href="#根据Dom树创建真实Dom" class="headerlink" title="根据Dom树创建真实Dom"></a>根据Dom树创建真实Dom</h3><p>先不考虑props和children属性来创建一个createElement函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createElement</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> node === <span class="string">'string'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">document</span>.createTextNode(node)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createElement(node.type)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码再只考虑文本节点和元素节点时是可以使用的，但当子元素还是文本节点或者元素时，就需要使用递归来循环调用，下面是实现代码：</p>
+<iframe width="100%" height="300" src="//jsfiddle.net/xingww_/9f7y6xn4/87/embedded/" allowfullscreen="allowfullscreen" allowpaymentrequest frameborder="0"></iframe>
 
-<h4 id="3-安装完成后的配置"><a href="#3-安装完成后的配置" class="headerlink" title="3. 安装完成后的配置"></a>3. 安装完成后的配置</h4><p>在安装后，输入公网 <code>IP</code> + 端口号 会自动进入配置页面，第一项的 <code>书库配置</code> 下的 <code>Calibre 数据库位置</code> 填成 <code>/books</code> ，然后点击提交，登录即可。默认用户为 <code> admin </code>密码为 <code> admin123</code> </p>
-<h3 id="以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。"><a href="#以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。" class="headerlink" title="以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。"></a>以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。</h3>
+<h3 id="处理Dom节点的变更"><a href="#处理Dom节点的变更" class="headerlink" title="处理Dom节点的变更"></a>处理Dom节点的变更</h3><p>转换成真实Dom后，会出现</p>
+
       
     </div>
     
@@ -436,11 +436,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/CentOS/" rel="tag"># CentOS</a>
+            <a href="/tags/%E8%99%9A%E6%8B%9FDom/" rel="tag"># 虚拟Dom</a>
           
-            <a href="/tags/Calibre-web/" rel="tag"># Calibre-web</a>
-          
-            <a href="/tags/%E4%B8%AA%E4%BA%BA%E4%B9%A6%E6%9E%B6/" rel="tag"># 个人书架</a>
+            <a href="/tags/Virtual-Dom/" rel="tag"># Virtual Dom</a>
           
         </div>
       
@@ -453,8 +451,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/posts/1e84ba96.html" rel="next" title="CentOS下使用Docker搭建Chevereto图床">
-                <i class="fa fa-chevron-left"></i> CentOS下使用Docker搭建Chevereto图床
+              <a href="/posts/cca26048.html" rel="next" title="排序-冒泡排序">
+                <i class="fa fa-chevron-left"></i> 排序-冒泡排序
               </a>
             
           </div>
@@ -463,8 +461,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/posts/af0d7242.html" rel="prev" title="Next+React+Antd-mobile的简单搭建使用">
-                Next+React+Antd-mobile的简单搭建使用 <i class="fa fa-chevron-right"></i>
+              <a href="/posts/9b949b3a.html" rel="prev" title="排序-选择排序">
+                排序-选择排序 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -634,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下面是详细安装步骤"><span class="nav-number">2.</span> <span class="nav-text">下面是详细安装步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-安装Docker"><span class="nav-number">2.1.</span> <span class="nav-text">1. 安装Docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-创建Calibre容器"><span class="nav-number">2.2.</span> <span class="nav-text">2. 创建Calibre容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-启动容器"><span class="nav-number">2.3.</span> <span class="nav-text">3. 启动容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其中遇到的问题"><span class="nav-number">2.4.</span> <span class="nav-text">其中遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-启动过程中从github拉取代码卡着不动"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 启动过程中从github拉取代码卡着不动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-日志中警告-No-write-access-at-books-new-‘metadata-db’-and-books-can’t-be-stored-at-this-directory-Please-check-and-modify-the-permissions-of-the-directory"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 日志中警告 No write access at /books - new ‘metadata.db’ and books can’t be stored at this directory,Please check and modify the permissions of the directory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-安装完成后的配置"><span class="nav-number">2.4.3.</span> <span class="nav-text">3. 安装完成后的配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。"><span class="nav-number">2.5.</span> <span class="nav-text">以上就是全部的安装过程和遇到的问题，如想使用其他安装方式或者遇到其他问题都可以从Github以及文档中找到。</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成Dom树"><span class="nav-number">1.</span> <span class="nav-text">生成Dom树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据Dom树创建真实Dom"><span class="nav-number">2.</span> <span class="nav-text">根据Dom树创建真实Dom</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理Dom节点的变更"><span class="nav-number">3.</span> <span class="nav-text">处理Dom节点的变更</span></a></li></ol></div>
             
 
           </div>
