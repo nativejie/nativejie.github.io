@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="mask-icon" href="https://files.catbox.moe/q1tlll.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言最近公司需要使用 Next 结合  React 、 Antd-Mobile 开发服务端渲染的H5，于是就看了些文档搭建一个简单地环境记录下来。 Next文档 一、搭建基础环境1. 使用 yarn 或者 npm 初始化一个文件夹1yarn init OR 1npm init 2. 安装要使用的包package.json 整体配置 123456789101112131415161718192021">
+<meta name="keywords" content="Next,Antd-Mobile,React">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Next+React+Antd-mobile的简单搭建使用">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.qinayu.cn&#x2F;posts&#x2F;2019&#x2F;11&#x2F;12&#x2F;af0d7242.html">
+<meta property="og:site_name" content="千羽">
+<meta property="og:description" content="前言最近公司需要使用 Next 结合  React 、 Antd-Mobile 开发服务端渲染的H5，于是就看了些文档搭建一个简单地环境记录下来。 Next文档 一、搭建基础环境1. 使用 yarn 或者 npm 初始化一个文件夹1yarn init OR 1npm init 2. 安装要使用的包package.json 整体配置 123456789101112131415161718192021">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http:&#x2F;&#x2F;60.205.204.237:8080&#x2F;images&#x2F;2019&#x2F;11&#x2F;12&#x2F;TIM20191112190005.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;60.205.204.237:8080&#x2F;images&#x2F;2019&#x2F;11&#x2F;12&#x2F;37C0255D230C976EE64B6049DE4DC65A.png">
+<meta property="og:updated_time" content="2022-07-19T03:05:11.327Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;60.205.204.237:8080&#x2F;images&#x2F;2019&#x2F;11&#x2F;12&#x2F;TIM20191112190005.png">
+
+<link rel="canonical" href="http://www.qinayu.cn/posts/2019/11/12/af0d7242.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Next+React+Antd-mobile的简单搭建使用 | 千羽</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">千羽</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">千羽的博客</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.qinayu.cn/posts/2019/11/12/af0d7242.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://files.catbox.moe/q1tlll.png">
+      <meta itemprop="name" content="千羽">
+      <meta itemprop="description" content="千羽的博客,学习记录博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="千羽">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Next+React+Antd-mobile的简单搭建使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-12 21:05:06" itemprop="dateCreated datePublished" datetime="2019-11-12T21:05:06+08:00">2019-11-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-19 11:05:11" itemprop="dateModified" datetime="2022-07-19T11:05:11+08:00">2022-07-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index">
+                    <span itemprop="name">前端框架</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/posts/2019/11/12/af0d7242.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2019/11/12/af0d7242.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近公司需要使用<code> Next </code>结合 <code> React </code>、<code> Antd-Mobile </code>开发服务端渲染的H5，于是就看了些文档搭建一个简单地环境记录下来。</p>
+<p><a href="https://nextjs.frontendx.cn/docs/" target="_blank" rel="noopener">Next文档</a></p>
+<h2 id="一、搭建基础环境"><a href="#一、搭建基础环境" class="headerlink" title="一、搭建基础环境"></a>一、搭建基础环境</h2><h3 id="1-使用-yarn-或者-npm-初始化一个文件夹"><a href="#1-使用-yarn-或者-npm-初始化一个文件夹" class="headerlink" title="1. 使用 yarn 或者 npm 初始化一个文件夹"></a>1. 使用<code> yarn </code>或者<code> npm </code>初始化一个文件夹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn init</span><br></pre></td></tr></table></figure>
+<p>OR</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
+<h3 id="2-安装要使用的包"><a href="#2-安装要使用的包" class="headerlink" title="2. 安装要使用的包"></a>2. 安装要使用的包</h3><p><code>package.json </code>整体配置</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span>: <span class="string">"next-react-demo"</span>,</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</span><br><span class="line">  <span class="attr">"main"</span>: <span class="string">"index.js"</span>,</span><br><span class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</span><br><span class="line">  <span class="attr">"scripts"</span>: &#123;</span><br><span class="line">    <span class="attr">"dev"</span>: <span class="string">"next -p 3001"</span>,</span><br><span class="line">    <span class="attr">"build"</span>: <span class="string">"next build"</span>,</span><br><span class="line">    <span class="attr">"start"</span>: <span class="string">"next start"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">    <span class="attr">"@babel/plugin-proposal-class-properties"</span>: <span class="string">"^7.7.0"</span>,</span><br><span class="line">    <span class="attr">"@babel/plugin-proposal-decorators"</span>: <span class="string">"^7.7.0"</span>,</span><br><span class="line">    <span class="attr">"@zeit/next-less"</span>: <span class="string">"^1.0.1"</span>,</span><br><span class="line">    <span class="attr">"antd-mobile"</span>: <span class="string">"^2.3.1"</span>,</span><br><span class="line">    <span class="attr">"babel-plugin-import"</span>: <span class="string">"^1.12.2"</span>,</span><br><span class="line">    <span class="attr">"babel-plugin-module-resolver"</span>: <span class="string">"^3.2.0"</span>,</span><br><span class="line">    <span class="attr">"less"</span>: <span class="string">"^3.10.3"</span>,</span><br><span class="line">    <span class="attr">"next"</span>: <span class="string">"^9.1.3"</span>,</span><br><span class="line">    <span class="attr">"react"</span>: <span class="string">"^16.11.0"</span>,</span><br><span class="line">    <span class="attr">"react-dom"</span>: <span class="string">"^16.11.0"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行<code> yarn </code>或<code> npm install </code>进行安装</p>
+<h3 id="3-新建-pages-index-js-文件，写入以下代码运行测试"><a href="#3-新建-pages-index-js-文件，写入以下代码运行测试" class="headerlink" title="3. 新建 pages/index.js 文件，写入以下代码运行测试"></a>3. 新建<code> pages/index.js </code>文件，写入以下代码运行测试</h3>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> () =&gt; <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>Welcome to next.js!<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>运行<code> npm run dev </code>命令并打开 <a href="http://localhost:3000。" target="_blank" rel="noopener">http://localhost:3000。</a> 如果你想使用其他端口，可运行<code> npm run dev -- -p <设置端口号></code>。<br>在浏览器可看到如下结果：<br><img src="http://60.205.204.237:8080/images/2019/11/12/TIM20191112190005.png" alt="效果"></p>
+<h2 id="二、加入antd-mobile和less"><a href="#二、加入antd-mobile和less" class="headerlink" title="二、加入antd-mobile和less"></a>二、加入antd-mobile和less</h2><h3 id="1-增加-next-配置文件"><a href="#1-增加-next-配置文件" class="headerlink" title="1. 增加 next 配置文件"></a>1. 增加<code> next </code>配置文件</h3><p>根目录下新建<code> next.config.js </code>并加入以下配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> withLess = <span class="built_in">require</span>(<span class="string">'@zeit/next-less'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = withLess(&#123;</span><br><span class="line">    cssModules: <span class="literal">true</span>,</span><br><span class="line">    cssLoaderOptions: &#123;</span><br><span class="line">        importaLoaders: <span class="number">1</span>,</span><br><span class="line">        localIdentName: <span class="string">"[local]___[hash:base64:5]"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    lessLoaderOptions: &#123;</span><br><span class="line">        javascriptEnabled: <span class="literal">true</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    webpack(config, options) &#123;</span><br><span class="line">        <span class="keyword">return</span> config</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="2-增加-babel-文件配置"><a href="#2-增加-babel-文件配置" class="headerlink" title="2. 增加 babel 文件配置"></a>2. 增加<code> babel </code>文件配置</h3><p>根目录下新建<code> .babelrc </code>文件并加入以下配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"presets"</span>: [</span><br><span class="line">        <span class="string">"next/babel"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"plugins"</span>: [</span><br><span class="line">        <span class="comment">// ES6 语法转换</span></span><br><span class="line">        [<span class="string">"@babel/plugin-proposal-decorators"</span>, &#123; <span class="string">"legacy"</span>: <span class="literal">true</span> &#125;],</span><br><span class="line">        [<span class="string">"@babel/plugin-proposal-class-properties"</span>, &#123; <span class="string">"loose"</span>: <span class="literal">true</span> &#125;],</span><br><span class="line">        <span class="comment">// Alias</span></span><br><span class="line">        [<span class="string">"module-resolver"</span>,&#123;<span class="string">"root"</span>: [<span class="string">"./"</span>],<span class="string">"alias"</span>: &#123;<span class="string">"styles"</span>: <span class="string">"./styles"</span>, <span class="string">"@"</span>: <span class="string">"./pages"</span>&#125;&#125;],</span><br><span class="line">        <span class="comment">// 引入Antd-Mobile</span></span><br><span class="line">        [<span class="string">"import"</span>,&#123;<span class="string">"libraryName"</span>: <span class="string">"ant-mobile"</span>,<span class="string">"libraryDirectory"</span>:<span class="string">"lib"</span>,<span class="string">"style"</span>: <span class="literal">true</span>&#125;]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-在pages下新建-document-js文件用来自定义Document，并且在头部加入我们Antd-mobile的css"><a href="#3-在pages下新建-document-js文件用来自定义Document，并且在头部加入我们Antd-mobile的css" class="headerlink" title="3. 在pages下新建_document.js文件用来自定义Document，并且在头部加入我们Antd-mobile的css"></a>3. 在pages下新建_document.js文件用来自定义Document，并且在头部加入我们Antd-mobile的css</h3><p>之前一直搭好之后一直没有样式，找了很久才发觉还没有因为<code> Antd-Mobile </code>的样式文件，于是就使用了自定义<code> Document </code>，在其中引入<code> Css </code>。也可以使用其他方案去引用相应的<code> less </code> OR <code> sass </code>文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Document, &#123; Head, Main, NextScript &#125; <span class="keyword">from</span> <span class="string">'next/document'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">Document</span> </span>&#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      &lt;html &gt;</span><br><span class="line">        &lt;Head&gt;</span><br><span class="line">          &lt;meta name=<span class="string">"format-detection"</span> content=<span class="string">"telephone=no, email=no"</span> /&gt;</span><br><span class="line">          &lt;meta name=<span class="string">"viewport"</span> content=<span class="string">"width=device-width,height=device-height, user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1,target-densitydpi=device-dpi"</span> /&gt;</span><br><span class="line">          &lt;link href=<span class="string">"https://cdn.bootcss.com/antd-mobile/2.1.1/antd-mobile.css"</span> rel=<span class="string">"stylesheet"</span> /&gt;</span><br><span class="line">        &lt;<span class="regexp">/Head&gt;</span></span><br><span class="line"><span class="regexp">        &lt;body &gt;</span></span><br><span class="line"><span class="regexp">          &lt;Main /</span>&gt;</span><br><span class="line">          &lt;NextScript /&gt;</span><br><span class="line">        &lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>html&gt;</span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>新建<code> styles/style.less </code>文件，写入以下代码。这里测试下我们配置的 <code>less</code> 有没有生效</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">@h1-color:</span> aqua;</span><br><span class="line"><span class="selector-tag">h1</span>&#123;</span><br><span class="line">    <span class="attribute">color</span>: <span class="variable">@h1-color</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改<code> index </code>文件如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React, &#123; Fragment &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Button , WingBlank , WhiteSpace&#125; <span class="keyword">from</span> <span class="string">'antd-mobile'</span>;</span><br><span class="line"><span class="keyword">import</span> Head <span class="keyword">from</span> <span class="string">'next/head'</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">"../styles/style.less"</span>;</span><br><span class="line"><span class="keyword">const</span> Home = <span class="function"><span class="params">()</span> =&gt;</span> (</span><br><span class="line">  &lt;Fragment&gt;</span><br><span class="line">    &lt;Fragment&gt;</span><br><span class="line">      &lt;h1&gt;我是Next的首页&lt;<span class="regexp">/h1&gt;</span></span><br><span class="line"><span class="regexp">      &lt;WingBlank&gt;</span></span><br><span class="line"><span class="regexp">        &lt;Button&gt;默认按钮&lt;/</span>Button&gt;<span class="xml"><span class="tag">&lt;<span class="name">WhiteSpace</span> /&gt;</span></span></span><br><span class="line">      &lt;<span class="regexp">/WingBlank&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>Fragment&gt;</span><br><span class="line">  &lt;<span class="regexp">/Fragment&gt;</span></span><br><span class="line"><span class="regexp">);</span></span><br><span class="line"><span class="regexp">export default Home;</span></span><br></pre></td></tr></table></figure>
+<p>配置完成后可看到以下效果：</p>
+<p><img src="http://60.205.204.237:8080/images/2019/11/12/37C0255D230C976EE64B6049DE4DC65A.png" alt="结果"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章还是比较小白的，按照所有步骤做的话基本是没什么问题的，剩下的就是慢慢去优化项目结构来适配自己的项目。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Next/" rel="tag"># Next</a>
+              <a href="/tags/Antd-Mobile/" rel="tag"># Antd-Mobile</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/posts/2019/11/02/8172de42.html" rel="next" title="CentOS下使用Calibre-web搭建个人书架">
+                  <i class="fa fa-chevron-left"></i> CentOS下使用Calibre-web搭建个人书架
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/posts/2019/11/14/40e1b115.html" rel="prev" title="使用Vue开发Tabs组件（一）">
+                  使用Vue开发Tabs组件（一） <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一、搭建基础环境"><span class="nav-number">2.</span> <span class="nav-text">一、搭建基础环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-使用-yarn-或者-npm-初始化一个文件夹"><span class="nav-number">2.1.</span> <span class="nav-text">1. 使用 yarn 或者 npm 初始化一个文件夹</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-安装要使用的包"><span class="nav-number">2.2.</span> <span class="nav-text">2. 安装要使用的包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-新建-pages-index-js-文件，写入以下代码运行测试"><span class="nav-number">2.3.</span> <span class="nav-text">3. 新建 pages/index.js 文件，写入以下代码运行测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、加入antd-mobile和less"><span class="nav-number">3.</span> <span class="nav-text">二、加入antd-mobile和less</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-增加-next-配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">1. 增加 next 配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-增加-babel-文件配置"><span class="nav-number">3.2.</span> <span class="nav-text">2. 增加 babel 文件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-在pages下新建-document-js文件用来自定义Document，并且在头部加入我们Antd-mobile的css"><span class="nav-number">3.3.</span> <span class="nav-text">3. 在pages下新建_document.js文件用来自定义Document，并且在头部加入我们Antd-mobile的css</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="千羽"
+    src="https://files.catbox.moe/q1tlll.png">
+  <p class="site-author-name" itemprop="name">千羽</p>
+  <div class="site-description" itemprop="description">千羽的博客,学习记录博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nativejie" title="GitHub &rarr; https://github.com/nativejie" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jiezhouwork@gmail.com" title="E-Mail &rarr; mailto:jiezhouwork@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千羽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'VplpaTkDXKzMGs0tuoQXt2Qf-gzGzoHsz',
+    appKey: 'NdONxwh9XdF9m2IdlG0ccgeR',
+    placeholder: "留下您的足迹~",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-CN' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>

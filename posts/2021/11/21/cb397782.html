@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://files.catbox.moe/q1tlll.png">
+  <link rel="mask-icon" href="https://files.catbox.moe/q1tlll.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="注：本文为博主在公司做SDK时整理的一些数据收集方案，较为简单，适合参考。 我认为一套埋点系统应能收集数据 公共数据的获取1、网络状况使用Navigator获取网络信息 12&#x2F;&#x2F; downlink（网络下行速度） effectiveType（网络类型） onchange（有值代表网络状态变更） rtt（估算的往返时间） saveData（打开&#x2F;请求数据保护模式）const &amp;#123; downl">
+<meta name="keywords" content="前端埋点,埋点SDK,前端监控">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端埋点SDK数据收集方案">
+<meta property="og:url" content="http:&#x2F;&#x2F;www.qinayu.cn&#x2F;posts&#x2F;2021&#x2F;11&#x2F;21&#x2F;cb397782.html">
+<meta property="og:site_name" content="千羽">
+<meta property="og:description" content="注：本文为博主在公司做SDK时整理的一些数据收集方案，较为简单，适合参考。 我认为一套埋点系统应能收集数据 公共数据的获取1、网络状况使用Navigator获取网络信息 12&#x2F;&#x2F; downlink（网络下行速度） effectiveType（网络类型） onchange（有值代表网络状态变更） rtt（估算的往返时间） saveData（打开&#x2F;请求数据保护模式）const &amp;#123; downl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;github.com&#x2F;nativejie&#x2F;images&#x2F;blob&#x2F;main&#x2F;blog&#x2F;track&#x2F;data.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;tc.qinayu.cn&#x2F;images&#x2F;2021&#x2F;11&#x2F;21&#x2F;imageddd900efaff2bf99.png">
+<meta property="og:updated_time" content="2022-07-19T03:05:42.353Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;github.com&#x2F;nativejie&#x2F;images&#x2F;blob&#x2F;main&#x2F;blog&#x2F;track&#x2F;data.png">
+
+<link rel="canonical" href="http://www.qinayu.cn/posts/2021/11/21/cb397782.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>前端埋点SDK数据收集方案 | 千羽</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">千羽</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">千羽的博客</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://www.qinayu.cn/posts/2021/11/21/cb397782.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://files.catbox.moe/q1tlll.png">
+      <meta itemprop="name" content="千羽">
+      <meta itemprop="description" content="千羽的博客,学习记录博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="千羽">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          前端埋点SDK数据收集方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-21 21:34:22" itemprop="dateCreated datePublished" datetime="2021-11-21T21:34:22+08:00">2021-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-07-19 11:05:42" itemprop="dateModified" datetime="2022-07-19T11:05:42+08:00">2022-07-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/posts/2021/11/21/cb397782.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/posts/2021/11/21/cb397782.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>注：本文为博主在公司做SDK时整理的一些数据收集方案，较为简单，适合参考。</strong></p>
+<p>我认为一套埋点系统应能收集数据<br><img src="https://github.com/nativejie/images/blob/main/blog/track/data.png" alt="埋点系统应能收集数据.png"></p>
+<h4 id="公共数据的获取"><a href="#公共数据的获取" class="headerlink" title="公共数据的获取"></a>公共数据的获取</h4><h5 id="1、网络状况"><a href="#1、网络状况" class="headerlink" title="1、网络状况"></a>1、网络状况</h5><p>使用<code>Navigator</code>获取网络信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// downlink（网络下行速度） effectiveType（网络类型） onchange（有值代表网络状态变更） rtt（估算的往返时间） saveData（打开/请求数据保护模式）</span></span><br><span class="line"><span class="keyword">const</span> &#123; downlink, effectiveType, rtt &#125; = <span class="built_in">window</span>.navigator.connection</span><br></pre></td></tr></table></figure>
+<h5 id="2、环境信息"><a href="#2、环境信息" class="headerlink" title="2、环境信息"></a>2、环境信息</h5><p>使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator" target="_blank" rel="noopener">Navigator</a>获取环境设备</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; appVersion, userAgent, platform &#125; = <span class="built_in">window</span>.navigator</span><br></pre></td></tr></table></figure>
+<h5 id="3、用户信息"><a href="#3、用户信息" class="headerlink" title="3、用户信息"></a>3、用户信息</h5><p>根据<code>IP</code>、手机号、业务中的用户信息、<code>cookie</code>来进行标识</p>
+<h5 id="4、地理位置"><a href="#4、地理位置" class="headerlink" title="4、地理位置"></a>4、地理位置</h5><p>后端获取<code>IP</code>并且解析</p>
+<h5 id="5、用户来源"><a href="#5、用户来源" class="headerlink" title="5、用户来源"></a>5、用户来源</h5><p>可根据下文提到的拦截路由去获得来源进行分析</p>
+<h5 id="6、性能信息"><a href="#6、性能信息" class="headerlink" title="6、性能信息"></a>6、性能信息</h5><p>根据<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance" target="_blank" rel="noopener">Performance</a>属性获取</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> performance = &#123;</span><br><span class="line">	<span class="comment">// 非标准属性 chrome专属</span></span><br><span class="line">	memory: &#123;</span><br><span class="line">		jsHeapSizeLimit: <span class="number">4294705152</span>, <span class="comment">// 内存大小限制</span></span><br><span class="line">		totalJSHeapSize: <span class="number">23600595</span>, <span class="comment">// 可使用对的内存</span></span><br><span class="line">		usedJSHeapSize: <span class="number">21720723</span>, <span class="comment">// JS已使用的内存</span></span><br><span class="line">	&#125;,</span><br><span class="line">	navigation: &#123;</span><br><span class="line">		redirectCount: <span class="number">0</span>, <span class="comment">// 重定向次数</span></span><br><span class="line">		type: <span class="number">0</span>, <span class="comment">// 0 - TYPE_NAVIGATENEXT 正常进入的页面（非刷新、非重定向等）1 - TYPE_RELOAD通过 window.location.reload() 刷新的页面 2 - TYPE_BACK_FORWARD 通过浏览器的前进后退按钮进入的页面（历史记录） 			255 - TYPE_UNDEFINED 非以上方式进入的页面</span></span><br><span class="line">	&#125;,</span><br><span class="line">	timeOrigin: <span class="number">1635326891160.134</span>, <span class="comment">// 返回一个表示 the performance measurement 开始时间的高精度 timestamp</span></span><br><span class="line">	<span class="comment">// 已废弃</span></span><br><span class="line">	timing: &#123;</span><br><span class="line">		connectEnd: <span class="number">1635326891193</span>, <span class="comment">// 浏览器与服务器之间的连接建立时的Unix毫秒时间戳。如果建立的是持久连接，则返回值等同于fetchStart属性的值</span></span><br><span class="line">		connectStart: <span class="number">1635326891179</span>, <span class="comment">// HTTP请求开始向服务器发送时的Unix毫秒时间戳。如果使用持久连接（persistent connection），则返回值等同于fetchStart属性的值</span></span><br><span class="line">		domComplete: <span class="number">1635326893366</span>, <span class="comment">// 当前文档解析完成，即Document.readyState 变为 'complete'且相对应的readystatechange (en-US) 被触发时的Unix毫秒时间戳</span></span><br><span class="line">		domContentLoadedEventEnd: <span class="number">1635326892109</span>, <span class="comment">// 当所有需要立即执行的脚本已经被执行（不论执行顺序）时的Unix毫秒时间戳</span></span><br><span class="line">		domContentLoadedEventStart: <span class="number">1635326892108</span>, <span class="comment">// 当解析器发送DOMContentLoaded (en-US) 事件，即所有需要被执行的脚本已经被解析时的Unix毫秒时间戳</span></span><br><span class="line">		domInteractive: <span class="number">1635326892108</span>, <span class="comment">// 当前网页DOM结构结束解析、开始加载内嵌资源时（即Document.readyState属性变为“interactive”、相应的readystatechange (en-US)事件触发时）的Unix毫秒时间戳。</span></span><br><span class="line">		domLoading: <span class="number">1635326891267</span>,<span class="comment">// 当前网页DOM结构开始解析时（即Document.readyState属性变为“loading”、相应的 readystatechange (en-US)事件触发时）的Unix毫秒时间戳。</span></span><br><span class="line">		domainLookupEnd: <span class="number">1635326891166</span>, <span class="comment">// 域名查询结束的UNIX时间戳。如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和 PerformanceTiming.fetchStart一致</span></span><br><span class="line">		domainLookupStart: <span class="number">1635326891166</span>, <span class="comment">// 域名查询开始的UNIX时间戳。如果使用了持续连接(persistent connection)，或者这个信息存储到了缓存或者本地资源上，这个值将和 PerformanceTiming.fetchStart一致。</span></span><br><span class="line">		fetchStart: <span class="number">1635326891166</span>, <span class="comment">// 浏览器准备好使用HTTP请求来获取(fetch)文档的UNIX时间戳。这个时间点会在检查任何应用缓存之前。</span></span><br><span class="line">		loadEventEnd: <span class="number">1635326893367</span>, <span class="comment">// 当load (en-US)事件结束，即加载事件完成时的Unix毫秒时间戳。如果这个事件还未被发送，或者尚未完成，它的值将会是0.</span></span><br><span class="line">		loadEventStart: <span class="number">1635326893367</span>, <span class="comment">// 该文档下，load (en-US)事件被发送时的Unix毫秒时间戳。如果这个事件还未被发送，它的值将会是0</span></span><br><span class="line">		navigationStart: <span class="number">1635326891160</span>, <span class="comment">// 从同一个浏览器上下文的上一个文档卸载(unload)结束时的UNIX时间戳。如果没有上一个文档，这个值会和PerformanceTiming.fetchStart相同。</span></span><br><span class="line">		redirectEnd: <span class="number">0</span>, <span class="comment">// 最后一个HTTP重定向完成时（也就是说是HTTP响应的最后一个比特直接被收到的时间）的UNIX时间戳。如果没有重定向，或者重定向中的一个不同源，这个值会返回0.</span></span><br><span class="line">		redirectStart: <span class="number">0</span>, <span class="comment">// 第一个HTTP重定向开始时的UNIX时间戳。如果没有重定向，或者重定向中的一个不同源，这个值会返回0.</span></span><br><span class="line">		requestStart: <span class="number">1635326891193</span>, <span class="comment">// 浏览器向服务器发出HTTP请求时（或开始读取本地缓存时）的Unix毫秒时间戳。</span></span><br><span class="line">		responseEnd: <span class="number">1635326891247</span>, <span class="comment">// 浏览器从服务器收到（或从本地缓存读取，或从本地资源读取）最后一个字节时（如果在此之前HTTP连接已经关闭，则返回关闭时）的Unix毫秒时间戳。</span></span><br><span class="line">		responseStart: <span class="number">1635326891207</span>, <span class="comment">// 浏览器从服务器收到（或从本地缓存读取）第一个字节时的Unix毫秒时间戳。如果传输层在开始请求之后失败并且连接被重开，该属性将会被数制成新的请求的相对应的发起时间。</span></span><br><span class="line">		secureConnectionStart: <span class="number">1635326891179</span>, <span class="comment">// 浏览器与服务器开始安全链接的握手时的Unix毫秒时间戳。如果当前网页不要求安全连接，则返回0</span></span><br><span class="line">		unloadEventEnd: <span class="number">1635326891259</span>, <span class="comment">// unload (en-US)事件处理完成时的UNIX时间戳。如果没有上一个文档，这个值会返回0.</span></span><br><span class="line">		unloadEventStart: <span class="number">1635326891259</span>, <span class="comment">// unload (en-US)事件抛出时的UNIX时间戳。如果没有上一个文档, 这个值会返回0.</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 基础性能信息计算</span></span><br><span class="line"><span class="keyword">const</span> t = performance.timing;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Time To Start Render</span></span><br><span class="line"><span class="keyword">const</span> loadPage = t.loadEventEnd - t.navigationStart</span><br><span class="line"></span><br><span class="line"><span class="comment">// Time To Document Complate</span></span><br><span class="line"><span class="keyword">const</span> domReady = t.domComplete - t.responseEnd</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> redirect = t.redirectEnd - t.redirectStart</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> lookupDomain = t.domainLookupEnd - t.domainLookupStart</span><br><span class="line"></span><br><span class="line"><span class="comment">// Time To First Byte</span></span><br><span class="line"><span class="keyword">const</span> loadEnd = t.responseStart - t.navigationStart</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> loadContext = t.responseEnd - t.requestStart</span><br><span class="line"></span><br><span class="line"><span class="comment">// Time To Fully Loaded</span></span><br><span class="line"><span class="keyword">const</span> loadEvent = t.loadEventLoad - t.loadEventStart</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> appCache = t.domainLoookupStart - t.fetchStart</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> unloadEvent = t.unloadEventEnd - t.unloadEventStart</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connect = t.connectEnd - t.connectStart</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="接口数据获取"><a href="#接口数据获取" class="headerlink" title="接口数据获取"></a>接口数据获取</h4><p>重写<code>XMLHttpRequest</code>的<code>open</code>、<code>send</code>函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> originXHROpen = XMLHttpRequest.prototype.open;</span><br><span class="line"><span class="keyword">const</span> originXHRSend = XMLHttpRequest.prototype.send;</span><br><span class="line"><span class="keyword">let</span> timeStart, timeEnd;</span><br><span class="line">XMLHttpRequest.prototype.open = <span class="function"><span class="keyword">function</span> (<span class="params">method, uri, async, user, pass</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(method, uri, <span class="keyword">async</span>, user, pass); <span class="comment">// 请求方法、请求名称地址</span></span><br><span class="line">	timeStart = <span class="built_in">Date</span>.now();</span><br><span class="line">	originXHROpen.call(<span class="keyword">this</span>, method, uri, <span class="keyword">async</span>, user, pass);</span><br><span class="line">&#125;;</span><br><span class="line">XMLHttpRequest.prototype.send = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">"send params: "</span>, <span class="built_in">arguments</span>); <span class="comment">// 请求参数</span></span><br><span class="line">	<span class="keyword">this</span>.onloadend = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="keyword">const</span> &#123; responseType, response, status &#125; = <span class="keyword">this</span>;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"response:"</span>, status, responseType, response); <span class="comment">// 响应信息 </span></span><br><span class="line">		timeEnd = <span class="built_in">Date</span>.now();</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">"response time:"</span>, timeEnd - timeStart);<span class="comment">// 请求时长</span></span><br><span class="line">	&#125;;</span><br><span class="line">	originXHRSend.call(<span class="keyword">this</span>, ...arguments);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="用户行为数据"><a href="#用户行为数据" class="headerlink" title="用户行为数据"></a>用户行为数据</h4><h5 id="1、页面可见和时长"><a href="#1、页面可见和时长" class="headerlink" title="1、页面可见和时长"></a>1、页面可见和时长</h5><p>利用<code>Web Lifecycle</code></p>
+<p><code>Google</code>推出的描述页面生命周期的<code>Page Lifecycle API</code>规范，<code>SDK</code>便是基于这套规范来监听页面可见性变化的。规范指出，一个网页从载入到销毁的过程中，会通过浏览器的各种事件在以下六种生命周期状态 (<code>Lifecycle State</code>) 之间相互转化。</p>
+<table>
+<thead>
+<tr>
+<th align="left">生命周期状态</th>
+<th align="left">描述</th>
+<th align="left">上一个可能的状态</th>
+<th align="left">下一个可能的状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">active</td>
+<td align="left">网页可见、且具有焦点</td>
+<td align="left">passive</td>
+<td align="left">passive</td>
+</tr>
+<tr>
+<td align="left">passive</td>
+<td align="left">网页可见、但处于失焦状态</td>
+<td align="left">active、 hidden</td>
+<td align="left">active、hidden</td>
+</tr>
+<tr>
+<td align="left">hidden</td>
+<td align="left">网页不可见，但未被浏览器冻结，一般由用户切换到别的tab或最小化浏览器</td>
+<td align="left">passive</td>
+<td align="left">passive、frozen、terminated</td>
+</tr>
+<tr>
+<td align="left">frozen</td>
+<td align="left">网页被浏览器冻结，在冻结状态下，浏览器暂停在页面的任务队列中执行任务，直到页面解冻。（一些后台任务例如定时器、fetch 等被挂起以节约 CPU 资源）</td>
+<td align="left">hidden</td>
+<td align="left">active、passive、hidden</td>
+</tr>
+<tr>
+<td align="left">terminated</td>
+<td align="left">网页被浏览器卸载并从内存中清理。一般用户主动将网页关闭时触发此状态</td>
+<td align="left">hidden</td>
+<td align="left">NONE</td>
+</tr>
+<tr>
+<td align="left">discarded</td>
+<td align="left">网页被浏览器强制清理。一般由系统资源严重不足引起，该页面处于丢弃状态。任何任务、事件回调或任何类型的JavaScript都不能在这种状态下运行</td>
+<td align="left">frozen</td>
+<td align="left">NONE</td>
+</tr>
+</tbody></table>
+<p><strong>转化关系</strong></p>
+<p><img src="https://tc.qinayu.cn/images/2021/11/21/imageddd900efaff2bf99.png" alt="转化关系.png"></p>
+<p>从上可知<code>active、passive</code>是<code>visible</code>状态，<code>hidden、terminated、frozen、discarded</code>是<code>invisible</code>状态</p>
+<p>使用<code>Google</code>开发的 <code>PageLifecycle.js SDK</code> 进行监听</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lifecycle.addEventListener(<span class="string">'statechange'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>) </span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(event.oldState, event.newState);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>注：<code>PageLifecycle</code>无法判断<code>discarded</code>生命周期，所以需要自己在页面进入<code>invisible</code>时将数据存在<code>locaStorage</code>、在关闭或者页面<code>visible</code>时将数据上传并删除</p>
+<p>由于<code>PageLifecycle</code>无法监听SPA应用，需要针对路由变化进行处理</p>
+<p>注：调用<code>history.pushState()</code>或者<code>history.replaceState()</code>不会触发<code>popstate</code>事件. <code>popstate</code>事件只会在浏览器某些行为下触发, 比如点击后退、前进按钮(或者在<code>JavaScript</code>中调用<code>history.back()、history.forward()、history.go()</code>方法)，此外，<code>a</code>标签的锚点也会触发该事件.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拦截history路由</span></span><br><span class="line"><span class="built_in">window</span>.onpopstate = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;...&#125;</span><br><span class="line"><span class="built_in">window</span>.history.pushState = <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;...&#125;</span><br><span class="line"><span class="built_in">window</span>.history.replaceState = <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;...&#125;</span><br><span class="line"><span class="comment">// 拦截hash路由</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="built_in">window</span>.onpopstate) &#123;</span><br><span class="line">	<span class="built_in">window</span>.onhashchange = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;...&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2、页面活跃</p>
+<p>通过监听一系列的浏览器事件，我们就可以判断用户是否在当前页面上有活动例如：<code>keydown、mousedown、mouseover、touchstart、touchend、scroll</code></p>
+<p>判断<code>inactive</code>状态：设置阈值、或者状态位<code>invisible</code></p>
+<p>3、页面<code>dom</code>结构变化</p>
+<p>调用<code>MutationObserver API</code>监听整个<code>DOM</code>结构的改变，异步<code>MutationObserver</code>是异步触发，如果连续插入<code>1000</code>个<code>p</code>标签，<code>mutationObserver</code>只会触发一次</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> MutationObserver(<span class="function"><span class="keyword">function</span> (<span class="params">mutations, observer</span>) </span>&#123;</span><br><span class="line">	mutations.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">mutation</span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(mutation.target); <span class="comment">// target: 发生变动的 DOM 节点</span></span><br><span class="line">	&#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observer.observe(<span class="built_in">document</span>.documentElement, &#123;</span><br><span class="line">	childList: <span class="literal">true</span>, <span class="comment">//子节点的变动（指新增，删除或者更改）</span></span><br><span class="line">	attributes: <span class="literal">true</span>, <span class="comment">// 属性的变动</span></span><br><span class="line">	characterData: <span class="literal">true</span>, <span class="comment">// 节点内容或节点文本的变动</span></span><br><span class="line">	subtree: <span class="literal">true</span>, <span class="comment">// 表示是否将该观察器应用于该节点的所有后代节点</span></span><br><span class="line">	attributeOldValue: <span class="literal">false</span>, <span class="comment">// 表示观察 attributes 变动时，是否需要记录变动前的属性值</span></span><br><span class="line">	characterDataOldValue: <span class="literal">false</span>, <span class="comment">// 表示观察 characterData 变动时，是否需要记录变动前的值。</span></span><br><span class="line">	attributeFilter: <span class="literal">false</span>, <span class="comment">// 表示需要观察的特定属性，比如['class','src']</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observer.disconnect(); <span class="comment">// 用来停止观察。调用该方法后，DOM 再发生变动则不会触发观察器</span></span><br></pre></td></tr></table></figure>
+
+
+<p>为了找到被监听的元素或者说减少<code>dom</code>的监听，可以对要监听的<code>dom</code>加上属性</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">data-monitor-track</span>=<span class="string">"&#123;type: 'click_operation', params: &#123; value: 3 &#125;&#125;"</span>&gt;</span>Click Me<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">data-monitor-pv</span>=<span class="string">"&#123;type: 'component_pv', params: &#123; ... &#125;&#125;"</span>&gt;</span>Click Me<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注：组件库可能会被过滤掉自定义属性，这里还需要解决</p>
+<h5 id="4、组件可见性"><a href="#4、组件可见性" class="headerlink" title="4、组件可见性"></a>4、组件可见性</h5><p>判断组件可见性有以下三个维度：</p>
+<p>组件是否在<code>viewport</code>中 - 使用<code>IntersectionObserver API</code></p>
+<p>组件样式是否可见 - 根据元素<code>CSS</code>的<code>display、visible、opacity</code></p>
+<p>页面是否可见</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> IntersectionObserver(</span><br><span class="line">(entries) =&gt; &#123;</span><br><span class="line">	entries.forEach(<span class="function"><span class="keyword">function</span> (<span class="params">entry</span>) </span>&#123;</span><br><span class="line">		<span class="comment">/**</span></span><br><span class="line"><span class="comment">		entry.boundingClientRect // 目标元素的矩形区域的信息</span></span><br><span class="line"><span class="comment">		entry.intersectionRatio // 目标元素的可见比例，即 intersectionRect 占 boundingClientRect 的比例，完全可见时为 1，完全不可见时小于等于 0</span></span><br><span class="line"><span class="comment">		entry.intersectionRect // 目标元素与视口（或根元素）的交叉区域的信息</span></span><br><span class="line"><span class="comment">		entry.isIntersecting // 标示元素是已转换为相交状态 (true) 还是已脱离相交状态 (false)</span></span><br><span class="line"><span class="comment">		entry.rootBounds // 根元素的矩形区域的信息, getBoundingClientRect 方法的返回值，如果没有根元素（即直接相对于视口滚动），则返回 null</span></span><br><span class="line"><span class="comment">		entry.target // 被观察的目标元素，是一个 DOM 节点对象</span></span><br><span class="line"><span class="comment">		entry.time // 可见性发生变化的时间，是一个高精度时间戳，单位为毫秒</span></span><br><span class="line"><span class="comment">		**/</span></span><br><span class="line">	&#125;);</span><br><span class="line">&#125;,</span><br><span class="line">	&#123;</span><br><span class="line">		threshold: [<span class="number">0</span>, <span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">1</span>], <span class="comment">//该属性决定了什么时候触发回调函数。它是一个数组，每个成员都是一个门槛值，默认为 [0]，即交叉比例 (intersectionRatio) 达到 0 时触发回调函数</span></span><br><span class="line">	&#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">observer.observe(<span class="built_in">document</span>.getElementById(<span class="string">"img"</span>)); <span class="comment">// 开始监听一个目标元素</span></span><br><span class="line"></span><br><span class="line">observer.disconnect(); <span class="comment">// 停止全部监听工作</span></span><br></pre></td></tr></table></figure>
+
+
+<p>如果一个组件和<code>viewport</code>的相交比例小于某个值，则组件是<code>invisible</code>，大于某个值是<code>visible</code></p>
+<p>如果一个组件设置了<code>display: none, visibility: hidden, opacity: 0</code>会被标记成<code>invisible</code></p>
+<p>当页面不可见时，所有组件自然都不可见，因此在页面为 <code>invisible</code> 的状态下。</p>
+<h5 id="4、行为轨迹"><a href="#4、行为轨迹" class="headerlink" title="4、行为轨迹"></a>4、行为轨迹</h5><p>要记录一个用户的行为轨迹不仅仅需要监听鼠标、键盘、触摸等事件，还需要将以下方法进行拦截联合起来形成记录堆栈</p>
+<p><code>history</code>和<code>hash</code>路由拦截 - 上面已实现</p>
+<p><code>xhr</code>拦截 - 上面已实现</p>
+<p><code>fetch</code>拦截 - </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fetch</span></span><br><span class="line"><span class="built_in">window</span>.fetch = <span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line">dom的原生事件</span><br><span class="line"><span class="built_in">document</span>.addEventListener(<span class="string">'click'</span>, callback, <span class="literal">true</span>) <span class="comment">// touch mouseover ....</span></span><br><span class="line"></span><br><span class="line">普通error事件</span><br><span class="line"><span class="built_in">window</span>.onerror = <span class="function"><span class="keyword">function</span>(<span class="params">message, source, lineno, colno, error</span>) </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>事件</span><br><span class="line"><span class="keyword">const</span> logType = [<span class="string">'log'</span>, <span class="string">'error'</span>, <span class="string">'warn'</span>, <span class="string">'info'</span>, <span class="string">'debug'</span>, <span class="string">'assert'</span>];</span><br><span class="line">logType.forEach(<span class="function"><span class="params">level</span> =&gt;</span> &#123;</span><br><span class="line">	<span class="keyword">const</span> origin = <span class="built_in">console</span>[level]</span><br><span class="line">	<span class="built_in">console</span>[level] = <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;...&#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">unhandledrejection事件</span><br><span class="line"><span class="built_in">window</span>.onunhandledrejection = <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;...&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="5、页面加载耗时"><a href="#5、页面加载耗时" class="headerlink" title="5、页面加载耗时"></a>5、页面加载耗时</h5><p>根据<code>Performance</code>接口数据就算</p>
+<h5 id="6、操作类型和操作内容"><a href="#6、操作类型和操作内容" class="headerlink" title="6、操作类型和操作内容"></a>6、操作类型和操作内容</h5><p>有了上述的事件监听便可判断操作类型和操作内容</p>
+<h4 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h4><p><a href="https://juejin.cn/post/6971370594117877796#heading-25" target="_blank" rel="noopener">手把手教你搭建一个无框架埋点体系</a></p>
+<p><a href="https://juejin.cn/post/6844903650603565063#heading-7" target="_blank" rel="noopener">前端监控和前端埋点方案设计</a></p>
+<p><a href="https://juejin.cn/post/6921549680639737863" target="_blank" rel="noopener">前端监控平台系列：微信小程序监控和Web监控</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E5%9F%8B%E7%82%B9/" rel="tag"># 前端埋点</a>
+              <a href="/tags/%E5%9F%8B%E7%82%B9SDK/" rel="tag"># 埋点SDK</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E7%9B%91%E6%8E%A7/" rel="tag"># 前端监控</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/posts/2021/11/15/4105fcb5.html" rel="next" title="RabbitMQ入门学习">
+                  <i class="fa fa-chevron-left"></i> RabbitMQ入门学习
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    <div class="comments" id="comments"></div>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#公共数据的获取"><span class="nav-number">1.</span> <span class="nav-text">公共数据的获取</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、网络状况"><span class="nav-number">1.1.</span> <span class="nav-text">1、网络状况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、环境信息"><span class="nav-number">1.2.</span> <span class="nav-text">2、环境信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3、用户信息"><span class="nav-number">1.3.</span> <span class="nav-text">3、用户信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、地理位置"><span class="nav-number">1.4.</span> <span class="nav-text">4、地理位置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5、用户来源"><span class="nav-number">1.5.</span> <span class="nav-text">5、用户来源</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6、性能信息"><span class="nav-number">1.6.</span> <span class="nav-text">6、性能信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口数据获取"><span class="nav-number">2.</span> <span class="nav-text">接口数据获取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户行为数据"><span class="nav-number">3.</span> <span class="nav-text">用户行为数据</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1、页面可见和时长"><span class="nav-number">3.1.</span> <span class="nav-text">1、页面可见和时长</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、组件可见性"><span class="nav-number">3.2.</span> <span class="nav-text">4、组件可见性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4、行为轨迹"><span class="nav-number">3.3.</span> <span class="nav-text">4、行为轨迹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5、页面加载耗时"><span class="nav-number">3.4.</span> <span class="nav-text">5、页面加载耗时</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6、操作类型和操作内容"><span class="nav-number">3.5.</span> <span class="nav-text">6、操作类型和操作内容</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="千羽"
+    src="https://files.catbox.moe/q1tlll.png">
+  <p class="site-author-name" itemprop="name">千羽</p>
+  <div class="site-description" itemprop="description">千羽的博客,学习记录博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/nativejie" title="GitHub &rarr; https://github.com/nativejie" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:jiezhouwork@gmail.com" title="E-Mail &rarr; mailto:jiezhouwork@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">千羽</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(item => {
+    return GUEST.includes(item);
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'VplpaTkDXKzMGs0tuoQXt2Qf-gzGzoHsz',
+    appKey: 'NdONxwh9XdF9m2IdlG0ccgeR',
+    placeholder: "留下您的足迹~",
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: 'zh-CN' || 'zh-cn',
+    path: location.pathname,
+    recordIP: false,
+    serverURLs: ''
+  });
+}, window.Valine);
+</script>
+
+</body>
+</html>
