@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
@@ -24,7 +24,7 @@
     version: '7.4.2',
     exturl: false,
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
+    copycode: {"enable":true,"show_result":true,"style":null},
     back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
     bookmark: {"enable":false,"color":"#222","save":"auto"},
     fancybox: false,
@@ -42,26 +42,26 @@
     path: '',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
     },
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="一、分析掘金网页1. 获取浏览器URL直接页面选择30内最热门的文章可得到URL地址为 https:&#x2F;&#x2F;juejin.im&#x2F;timeline?sort=monthly_hottest 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。 2. 获得数据API由此得到获取文章的API为 https:&#x2F;&#x2F;web-api.juejin.im&#x2F;query  3. 分析请求参数在登录状态下访问该接">
+  <meta name="description" content="一、分析掘金网页1. 获取浏览器URL直接页面选择30内最热门的文章可得到URL地址为 https:&#x2F;&#x2F;juejin.im&#x2F;timeline?sort=monthly_hottest 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。 2. 获得数据API由此得到获取文章的API为 https:&#x2F;&#x2F;web-api.juejin.im&#x2F;query">
 <meta name="keywords" content="爬虫,Scrapy,Python3">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Scrapy爬取掘金热门文章的分析和实现">
 <meta property="og:url" content="http:&#x2F;&#x2F;www.qinayu.cn&#x2F;posts&#x2F;2019&#x2F;12&#x2F;19&#x2F;be73a348.html">
 <meta property="og:site_name" content="千羽">
-<meta property="og:description" content="一、分析掘金网页1. 获取浏览器URL直接页面选择30内最热门的文章可得到URL地址为 https:&#x2F;&#x2F;juejin.im&#x2F;timeline?sort=monthly_hottest 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。 2. 获得数据API由此得到获取文章的API为 https:&#x2F;&#x2F;web-api.juejin.im&#x2F;query  3. 分析请求参数在登录状态下访问该接">
+<meta property="og:description" content="一、分析掘金网页1. 获取浏览器URL直接页面选择30内最热门的文章可得到URL地址为 https:&#x2F;&#x2F;juejin.im&#x2F;timeline?sort=monthly_hottest 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。 2. 获得数据API由此得到获取文章的API为 https:&#x2F;&#x2F;web-api.juejin.im&#x2F;query">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;19&#x2F;RJpczqKBEOSXo9I.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;19&#x2F;pTPbAdeSyiglUrc.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;19&#x2F;Gai9Zr7KBTQ4ICN.png">
-<meta property="og:updated_time" content="2022-07-19T03:05:11.328Z">
+<meta property="og:updated_time" content="2022-07-19T06:24:51.895Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;19&#x2F;RJpczqKBEOSXo9I.png">
 
@@ -133,7 +133,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -147,31 +147,31 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -185,7 +185,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocorrect="off" autocapitalize="none"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="text" id="search-input">
   </div>
   <span class="popup-btn-close">
@@ -242,22 +242,22 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2019-12-19 14:11:34" itemprop="dateCreated datePublished" datetime="2019-12-19T14:11:34+08:00">2019-12-19</time>
+              <time title="创建时间：2019-12-19 14:11:34" itemprop="dateCreated datePublished" datetime="2019-12-19T14:11:34+08:00">2019-12-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-19 11:05:11" itemprop="dateModified" datetime="2022-07-19T11:05:11+08:00">2022-07-19</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-19 14:24:51" itemprop="dateModified" datetime="2022-07-19T14:24:51+08:00">2022-07-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/%E7%88%AC%E8%99%AB%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" itemprop="url" rel="index">
                     <span itemprop="name">爬虫学习记录</span>
@@ -266,11 +266,11 @@
             </span>
 
           
-            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
   
@@ -279,7 +279,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-comment-o"></i>
       </span>
-      <span class="post-meta-item-text">Valine: </span>
+      <span class="post-meta-item-text">Valine：</span>
     
     <a title="valine" href="/posts/2019/12/19/be73a348.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count valine-comment-count" data-xid="/posts/2019/12/19/be73a348.html" itemprop="commentCount"></span>
@@ -299,6 +299,8 @@
       
         <h2 id="一、分析掘金网页"><a href="#一、分析掘金网页" class="headerlink" title="一、分析掘金网页"></a>一、分析掘金网页</h2><h3 id="1-获取浏览器URL"><a href="#1-获取浏览器URL" class="headerlink" title="1. 获取浏览器URL"></a>1. 获取浏览器URL</h3><p>直接页面选择30内最热门的文章可得到URL地址为 <a href="https://juejin.im/timeline?sort=monthly_hottest" target="_blank" rel="noopener">https://juejin.im/timeline?sort=monthly_hottest</a> 查看该网页Dom元素发现并没有文章的数据，可得知此为动态网页。</p>
 <h3 id="2-获得数据API"><a href="#2-获得数据API" class="headerlink" title="2. 获得数据API"></a>2. 获得数据API</h3><p><img src="https://i.loli.net/2019/12/19/RJpczqKBEOSXo9I.png" alt="请求"><br><img src="https://i.loli.net/2019/12/19/pTPbAdeSyiglUrc.png" alt="响应"><br>由此得到获取文章的API为 <a href="https://web-api.juejin.im/query" target="_blank" rel="noopener">https://web-api.juejin.im/query</a> </p>
+<a id="more"></a>
+
 <h3 id="3-分析请求参数"><a href="#3-分析请求参数" class="headerlink" title="3. 分析请求参数"></a>3. 分析请求参数</h3><p>在登录状态下访问该接口的<code> Header </code>中自定义的参数有:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X-Agent: Juejin/Web</span><br><span class="line">X-Legacy-Device-Id: 1575538149621</span><br><span class="line">X-Legacy-Token: eyJhY2Nlc3NfdG9rZWS4iOiJjMHFEbFBnZ1pFMmZtN3NxIiwicmVmcmVzaF90b2tlbiI6IkVoSXJPSlhvTEhRYlRBZmgiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfDGQ==</span><br><span class="line">X-Legacy-Uid: 5b502c73f265da0f9d19fc58</span><br></pre></td></tr></table></figure>
 <p><code> POST </code>的参数为:</p>
@@ -310,7 +312,7 @@
 <p>从上对比得出Header中<code> X-Legacy-Device-Id </code>、<code> X-Legacy-Token </code>、<code> X-Legacy-Uid </code>不必要，只需要<code> X-Agent: Juejin/Web </code>即可。<code> Post </code>的参数从中推出</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Category: 5562b415e4b00c57d9b94ac8  // 此为前端分类的标识</span><br><span class="line">Query : id // 顶部搜索条件</span><br><span class="line">order ： // 排序方式</span><br><span class="line">First： // 第一页条数</span><br><span class="line">tags: // Category下的标签</span><br><span class="line">after： //推测为滚动条距离底部的距离 分页相关</span><br></pre></td></tr></table></figure>
 <p>返回的数据结构为:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">数据结构</span><br><span class="line">&#123;</span><br><span class="line">	data: &#123;</span><br><span class="line">		articleFeed: &#123;</span><br><span class="line">			items: &#123;</span><br><span class="line">				edges: [] ,</span><br><span class="line">				pageInfo: &#123;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125; 			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">数据结构</span><br><span class="line">&#123;</span><br><span class="line">	data: &#123;</span><br><span class="line">		articleFeed: &#123;</span><br><span class="line">			items: &#123;</span><br><span class="line">				edges: [] ,</span><br><span class="line">				pageInfo: &#123;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;			</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最终取值应为<code> edges[index][nodes] </code></p>
 <h2 id="二、抓取数据"><a href="#二、抓取数据" class="headerlink" title="二、抓取数据"></a>二、抓取数据</h2><h3 id="1-使用scrapy创建项目，项目中-item-根据需求配置-item"><a href="#1-使用scrapy创建项目，项目中-item-根据需求配置-item" class="headerlink" title="1. 使用scrapy创建项目，项目中 item 根据需求配置 item "></a>1. 使用scrapy创建项目，项目中<code> item </code>根据需求配置<code> item </code></h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 此处我是用的项目名为project_002</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Project002Item</span><span class="params">(scrapy.Item)</span>:</span></span><br><span class="line">    title = scrapy.Field() </span><br><span class="line">    content = scrapy.Field()</span><br><span class="line">    url = scrapy.Field()</span><br><span class="line">    like = scrapy.Field()</span><br><span class="line">    user = scrapy.Field()</span><br><span class="line">    category = scrapy.Field()</span><br><span class="line">    updated_date = scrapy.Field()</span><br><span class="line">    article_id = scrapy.Field()</span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
 <h3 id="2-使用命令-scrapy-genspider-文件名-网址生成爬虫文件。"><a href="#2-使用命令-scrapy-genspider-文件名-网址生成爬虫文件。" class="headerlink" title="2. 使用命令 scrapy genspider 文件名 网址生成爬虫文件。"></a>2. 使用命令<code> scrapy genspider 文件名 网址</code>生成爬虫文件。</h3><p>生成后需改造爬虫文件<br>添加<code> Header </code>参数</p>
@@ -383,10 +385,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -409,20 +411,20 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">12</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
         <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -460,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">千羽</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
   </div>
 
         
@@ -473,7 +475,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -482,7 +484,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
@@ -560,7 +562,7 @@ NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
     meta: guest,
     pageSize: '10' || 10,
     visitor: false,
-    lang: 'zh-CN' || 'zh-cn',
+    lang: 'zh-Hans' || 'zh-cn',
     path: location.pathname,
     recordIP: false,
     serverURLs: ''

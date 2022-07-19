@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto Serif SC:300,300italic,400,400italic,700,700italic|Source Code Pro:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
@@ -24,7 +24,7 @@
     version: '7.4.2',
     exturl: false,
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
+    copycode: {"enable":true,"show_result":true,"style":null},
     back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
     bookmark: {"enable":false,"color":"#222","save":"auto"},
     fancybox: false,
@@ -42,23 +42,23 @@
     path: '',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
     },
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="前言 继承是JavaScript面向对象编程非常重要的一个特性，基本在日常使用以及面试过程中都会使用到。查阅一些资料后整理以下几种继承的方法记录在自己的博客中。  如何实现继承原型链继承 原型链继承是最简单的一种继承方式，只需要将子类的prototype值等于父类的实例即可  12345678910111213141516function Animal()&amp;#123;  this.superTyp">
+  <meta name="description" content="前言 继承是JavaScript面向对象编程非常重要的一个特性，基本在日常使用以及面试过程中都会使用到。查阅一些资料后整理以下几种继承的方法记录在自己的博客中。  如何实现继承原型链继承 原型链继承是最简单的一种继承方式，只需要将子类的prototype值等于父类的实例即可">
 <meta name="keywords" content="javascript,继承,前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于JavaScript继承的几种方法">
 <meta property="og:url" content="http:&#x2F;&#x2F;www.qinayu.cn&#x2F;posts&#x2F;2019&#x2F;10&#x2F;24&#x2F;342bfa85.html">
 <meta property="og:site_name" content="千羽">
-<meta property="og:description" content="前言 继承是JavaScript面向对象编程非常重要的一个特性，基本在日常使用以及面试过程中都会使用到。查阅一些资料后整理以下几种继承的方法记录在自己的博客中。  如何实现继承原型链继承 原型链继承是最简单的一种继承方式，只需要将子类的prototype值等于父类的实例即可  12345678910111213141516function Animal()&amp;#123;  this.superTyp">
+<meta property="og:description" content="前言 继承是JavaScript面向对象编程非常重要的一个特性，基本在日常使用以及面试过程中都会使用到。查阅一些资料后整理以下几种继承的方法记录在自己的博客中。  如何实现继承原型链继承 原型链继承是最简单的一种继承方式，只需要将子类的prototype值等于父类的实例即可">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2022-07-19T03:05:11.328Z">
+<meta property="og:updated_time" content="2022-07-19T06:25:01.732Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://www.qinayu.cn/posts/2019/10/24/342bfa85.html">
@@ -129,7 +129,7 @@
   </div>
 
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
+    <div class="toggle" aria-label="切换导航栏">
       <span class="toggle-line toggle-line-first"></span>
       <span class="toggle-line toggle-line-middle"></span>
       <span class="toggle-line toggle-line-last"></span>
@@ -143,31 +143,31 @@
   <ul id="menu" class="menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
       <li class="menu-item menu-item-search">
-        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
       </li>
   </ul>
@@ -181,7 +181,7 @@
   </span>
   <div class="search-input-container">
     <input autocomplete="off" autocorrect="off" autocapitalize="none"
-           placeholder="Searching..." spellcheck="false"
+           placeholder="搜索..." spellcheck="false"
            type="text" id="search-input">
   </div>
   <span class="popup-btn-close">
@@ -238,22 +238,22 @@
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
               </span>
-              <span class="post-meta-item-text">Posted on</span>
+              <span class="post-meta-item-text">发表于</span>
 
-              <time title="Created: 2019-10-24 14:54:12" itemprop="dateCreated datePublished" datetime="2019-10-24T14:54:12+08:00">2019-10-24</time>
+              <time title="创建时间：2019-10-24 14:54:12" itemprop="dateCreated datePublished" datetime="2019-10-24T14:54:12+08:00">2019-10-24</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-19 11:05:11" itemprop="dateModified" datetime="2022-07-19T11:05:11+08:00">2022-07-19</time>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-07-19 14:25:01" itemprop="dateModified" datetime="2022-07-19T14:25:01+08:00">2022-07-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
-              <span class="post-meta-item-text">In</span>
+              <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/Javascript%E9%82%A3%E4%BA%9B%E4%BA%8B/" itemprop="url" rel="index">
                     <span itemprop="name">Javascript那些事</span>
@@ -262,11 +262,11 @@
             </span>
 
           
-            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
-              <span class="post-meta-item-text">Views: </span>
+              <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
             </span>
   
@@ -275,7 +275,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-comment-o"></i>
       </span>
-      <span class="post-meta-item-text">Valine: </span>
+      <span class="post-meta-item-text">Valine：</span>
     
     <a title="valine" href="/posts/2019/10/24/342bfa85.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count valine-comment-count" data-xid="/posts/2019/10/24/342bfa85.html" itemprop="commentCount"></span>
@@ -299,6 +299,8 @@
 <h2 id="如何实现继承"><a href="#如何实现继承" class="headerlink" title="如何实现继承"></a>如何实现继承</h2><h3 id="原型链继承"><a href="#原型链继承" class="headerlink" title="原型链继承"></a>原型链继承</h3><blockquote>
 <p>原型链继承是最简单的一种继承方式，只需要将子类的<code>prototype</code>值等于父类的实例即可</p>
 </blockquote>
+<a id="more"></a>
+
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Animal</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.superType = <span class="string">'Animal'</span></span><br><span class="line">&#125;</span><br><span class="line">Animal.prototype.getSuperType = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.superType);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Cat</span>(<span class="params">name</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = name;</span><br><span class="line">  <span class="keyword">this</span>.type = <span class="string">'Cat'</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 原型继承</span></span><br><span class="line">Cat.prototype = <span class="keyword">new</span> Animal();</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> Cat()</span><br><span class="line"></span><br><span class="line">cat.getSuperType(); <span class="comment">// 控制台输出Animal</span></span><br></pre></td></tr></table></figure>
 <p>以上代码是将<code>Animal</code>的实例覆盖<code>Cat</code>的原型，本质是重写原型对象，代之一个新类型的实例。使<code>Cat</code>拥有<code>Animal</code>的<strong>实例</strong>的所有属性和方法(<code>getSuperType</code>为原型方法)，并且还有个指针指向了<code>Animal</code>的原型。当创建<code>Cat</code>的实例<code>cat</code>时，<code>cat</code>指向的是<code>Cat</code>的原型，<code>Cat</code>的原型又指向<code>Animal</code>的原型。</p>
 <blockquote>
@@ -411,10 +413,10 @@
 
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -437,20 +439,20 @@
           <a href="/archives/">
         
           <span class="site-state-item-count">12</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
         <span class="site-state-item-count">10</span>
-        <span class="site-state-item-name">categories</span></a>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
         <span class="site-state-item-count">25</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -488,10 +490,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">千羽</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
   </div>
 
         
@@ -501,7 +503,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-user"></i>
       </span>
-      <span class="site-uv" title="Total Visitors">
+      <span class="site-uv" title="总访客量">
         <span id="busuanzi_value_site_uv"></span>
       </span>
     </span>
@@ -510,7 +512,7 @@
       <span class="post-meta-item-icon">
         <i class="fa fa-eye"></i>
       </span>
-      <span class="site-pv" title="Total Views">
+      <span class="site-pv" title="总访问量">
         <span id="busuanzi_value_site_pv"></span>
       </span>
     </span>
@@ -588,7 +590,7 @@ NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
     meta: guest,
     pageSize: '10' || 10,
     visitor: false,
-    lang: 'zh-CN' || 'zh-cn',
+    lang: 'zh-Hans' || 'zh-cn',
     path: location.pathname,
     recordIP: false,
     serverURLs: ''
